@@ -27,7 +27,6 @@ object RetrofitClients {
         createRetrofitClient(
             readTimeoutSeconds = 3,
             writeTimeoutSeconds = 10,
-            connectTimeoutSeconds = 10,
             loggingTag = "CLIENT-SHORT-READ"
         )
     }
@@ -43,7 +42,6 @@ object RetrofitClients {
         createRetrofitClient(
             readTimeoutSeconds = 30,
             writeTimeoutSeconds = 30,
-            connectTimeoutSeconds = 10,
             loggingTag = "CLIENT-NORMAL"
         )
     }
@@ -59,7 +57,6 @@ object RetrofitClients {
         createRetrofitClient(
             readTimeoutSeconds = 30,
             writeTimeoutSeconds = 3,
-            connectTimeoutSeconds = 10,
             loggingTag = "CLIENT-SHORT-WRITE"
         )
     }
@@ -75,18 +72,17 @@ object RetrofitClients {
         createRetrofitClient(
             readTimeoutSeconds = 60,
             writeTimeoutSeconds = 60,
-            connectTimeoutSeconds = 10,
             loggingTag = "CLIENT-LONG"
         )
     }
 
     /**
      * Creates a Retrofit client with specified timeout configurations
+     * Connect timeout is fixed at 10 seconds for all clients
      */
     private fun createRetrofitClient(
         readTimeoutSeconds: Long,
         writeTimeoutSeconds: Long,
-        connectTimeoutSeconds: Long,
         loggingTag: String
     ): TimeoutTestApi {
 
@@ -98,10 +94,12 @@ object RetrofitClients {
         }
 
         // Build OkHttpClient with specified timeouts
-        val okHttpClient = OkHttpClient.Builder().readTimeout(readTimeoutSeconds, TimeUnit.SECONDS)
+        val okHttpClient = OkHttpClient.Builder()
+            .readTimeout(readTimeoutSeconds, TimeUnit.SECONDS)
             .writeTimeout(writeTimeoutSeconds, TimeUnit.SECONDS)
-            .connectTimeout(connectTimeoutSeconds, TimeUnit.SECONDS)
-            .addInterceptor(loggingInterceptor).build()
+            .connectTimeout(10, TimeUnit.SECONDS) // Fixed at 10 seconds for all clients
+            .addInterceptor(loggingInterceptor)
+            .build()
 
         // Build Retrofit instance with both Scalars and Gson converters
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL).client(okHttpClient)

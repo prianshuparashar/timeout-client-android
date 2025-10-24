@@ -23,32 +23,6 @@ interface TimeoutTestApi {
     suspend fun downloadSlowServer(@Query("delayBetweenChunks") delayBetweenChunks: Long = 6000): ResponseBody
 
     /**
-     * Download a large file to test read timeout with large payloads
-     * @return Streaming response body containing large data
-     */
-    @Streaming
-    @GET("/api/download/large-file")
-    suspend fun downloadLargeFile(): ResponseBody
-
-    /**
-     * Download endpoint that expects slow client consumption
-     * Tests SERVER write timeout when client reads data slowly
-     * @return Streaming response body
-     */
-    @Streaming
-    @GET("/api/download/expect-slow-client")
-    suspend fun downloadExpectSlowClient(): ResponseBody
-
-    /**
-     * Download endpoint to test server write timeout
-     * Server sends data and may timeout if client reads too slowly
-     * @return Streaming response body
-     */
-    @Streaming
-    @GET("/api/download/test-server-write-timeout")
-    suspend fun downloadTestServerWriteTimeout(): ResponseBody
-
-    /**
      * Upload to a slow server that delays between reads
      * @param delayBetweenReads Server-side delay in milliseconds between reads (default: 6000ms)
      * @param file Request body containing file data
@@ -60,37 +34,6 @@ interface TimeoutTestApi {
         @Body file: RequestBody
     ): String
 
-    /**
-     * Upload with slow server response
-     * Server processes upload normally but delays before sending response
-     * Tests CLIENT read timeout while waiting for response after upload
-     * @param delayBeforeResponse Server-side delay in milliseconds before sending response (default: 8000ms)
-     * @param file Request body containing file data
-     * @return String response from server
-     */
-    @POST("/api/upload/slow-response")
-    suspend fun uploadSlowResponse(
-        @Query("delayBeforeResponse") delayBeforeResponse: Long = 8000,
-        @Body file: RequestBody
-    ): String
-
-    /**
-     * Normal upload endpoint without delays
-     * @param file Request body containing file data
-     * @return String response from server
-     */
-    @POST("/api/upload/normal")
-    suspend fun uploadNormal(@Body file: RequestBody): String
-
-    /**
-     * Upload endpoint that expects fast client
-     * Tests SERVER read timeout when client sends data slowly
-     * Server has short connection-timeout configured
-     * @param file Request body containing file data
-     * @return String response from server
-     */
-    @POST("/api/upload/expect-fast-client")
-    suspend fun uploadExpectFastClient(@Body file: RequestBody): String
 
     /**
      * Simple ping endpoint to verify server connectivity
