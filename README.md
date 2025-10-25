@@ -277,6 +277,17 @@ app/src/androidTest/java/com/leedroid/timeoutclient/
 
 ---
 
+## Related Projects
+
+**[TimeoutServer](https://github.com/prianshuparashar/timeout-server-springboot)** - Backend server for testing HTTP timeout scenarios
+
+- Simulates slow data transmission with configurable delays
+- Provides endpoints for testing read/write timeouts
+- Detailed server-side logging for debugging
+- Built with Kotlin and Spring Boot
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please follow these steps:
